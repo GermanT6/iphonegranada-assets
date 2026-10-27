@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>iPhone Granada</title>
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#111827">
+
+<!-- Esto es lo que Apps Script no nos deja controlar: acá SÍ
+     funciona, porque esta página es la de "afuera" de verdad. -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="iPhone Granada">
+
+<!-- Ícono de la pantalla de inicio: cuadrado y SIN transparencia (el iPhone
+     rellena de negro lo transparente) y con aire alrededor para que no se corte -->
+<link rel="apple-touch-icon" href="icono-app-180.png">
+<link rel="icon" href="icono-app-192.png">
+
+<style>
+
+  *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;}
+
+  body{
+    background:#f4f5f7;
+    color:#111827;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:24px;
+  }
+
+  .caja{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:14px;
+    max-width:340px;
+  }
+
+  /* El ícono ya es cuadrado: se muestra entero, sin recortar */
+  img{
+    width:104px;
+    height:104px;
+    border-radius:24px;
+    object-fit:contain;
+    box-shadow:0 10px 24px rgba(17,24,39,.18);
+  }
+
+  h1{
+    font-size:20px;
+    color:#111827;
+    margin-top:4px;
+  }
+
+  p{
+    font-size:14px;
+    color:#6b7280;
+    margin-top:-6px;
+    line-height:1.5;
+  }
+
+  .spinner{
+    width:26px;
+    height:26px;
+    border:3px solid #e5e7eb;
+    border-top-color:#111827;
+    border-radius:50%;
+    animation:girar 0.8s linear infinite;
+  }
+
+  @keyframes girar{
+    to{ transform:rotate(360deg); }
+  }
+
+  .pasos{
+    background:white;
+    border:1px solid #e5e7eb;
+    border-radius:14px;
+    padding:16px 18px;
+    text-align:left;
+    font-size:14px;
+    line-height:1.7;
+    color:#111827;
+    width:100%;
+  }
+
+  .pasos b{
+    color:#0f9d6e;
+  }
+
+  a.abrir{
+    margin-top:6px;
+    display:inline-block;
+    background:#111827;
+    color:white;
+    text-decoration:none;
+    padding:12px 22px;
+    border-radius:10px;
+    font-size:14px;
+    font-weight:600;
+    width:100%;
+  }
+
+</style>
+
+</head>
+<body>
+
+  <!-- A propósito NO tiene la imagen del logo acá adentro: si
+       estamos en modo app, redirigimos enseguida y no queremos
+       que se llegue a pedir la imagen (por eso a veces se veía
+       "rota" a mitad de camino). Solo se agrega si hace falta
+       mostrar las instrucciones. -->
+  <div class="caja" id="caja">
+
+    <div class="spinner"></div>
+
+  </div>
+
+  <script>
+
+    const URL_APP = "https://script.google.com/macros/s/AKfycbz1O-buUoC-VpY1PNJFbTmVIlbmNnb8Z0YFqAdsa5nxWpE2spxMPlUA5k4ACiPMoXZO/exec";
+
+    // Solo redirige sola cuando ya la abriste desde el ícono que
+    // agregaste a la pantalla de inicio (eso es "modo standalone").
+    // Si la estás viendo en el navegador normal, se queda quieta
+    // mostrando los pasos, para darte tiempo a agregarla.
+
+    const enModoApp =
+        window.navigator.standalone === true ||
+        window.matchMedia("(display-mode: standalone)").matches;
+
+    if(enModoApp){
+
+        window.location.replace(URL_APP);
+
+    }else{
+
+        document.getElementById("caja").innerHTML = `
+
+            <img src="icono-app-180.png" alt="iPhone Granada">
+
+            <h1>iPhone Granada</h1>
+
+            <p>Para tenerla como una app en tu celular:</p>
+
+            <div class="pasos">
+
+                1. Tocá el botón <b>Compartir</b> (el cuadrado con la flecha, abajo en Safari)<br><br>
+                2. Elegí <b>"Agregar a pantalla de inicio"</b><br><br>
+                3. Listo — a partir de ahora abrila desde ese ícono nuevo
+
+            </div>
+
+            <a class="abrir" href="${URL_APP}">
+                Abrir la app ahora (sin instalar)
+            </a>
+
+        `;
+
+    }
+
+  </script>
+
+</body>
+</html>
